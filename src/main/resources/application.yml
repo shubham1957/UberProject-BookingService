@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: BookingService
+  datasource:
+    url: jdbc:mysql://localhost:3306/Uber_Db_Local
+    username: root
+    password: Mac@local
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+
+server:
+  port: 7477
+
+eureka:
+  client:
+    service-url:
+      defaultZone : http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
