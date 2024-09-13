@@ -1,7 +1,6 @@
 package org.example.uberprojectbookingservice.dto;
 
 import lombok.*;
-import org.example.uberprojectentityservice.models.BookingStatus;
 import org.example.uberprojectentityservice.models.Driver;
 
 import java.util.Optional;
@@ -14,6 +13,6 @@ import java.util.Optional;
 public class UpdateBookingResponseDto {
 
     private Long bookingId;
-    private BookingStatus status;
+    private String status;
     private Optional<Driver> driver;
 }
