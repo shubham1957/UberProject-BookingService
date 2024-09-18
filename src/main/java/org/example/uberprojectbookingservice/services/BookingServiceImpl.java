@@ -10,6 +10,8 @@ import org.example.uberprojectentityservice.models.Booking;
 import org.example.uberprojectentityservice.models.BookingStatus;
 import org.example.uberprojectentityservice.models.Driver;
 import org.example.uberprojectentityservice.models.Passenger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,6 +25,7 @@ import java.util.Optional;
 @Service
 public class BookingServiceImpl implements BookingService{
 
+    private final Logger logger = LoggerFactory.getLogger(BookingServiceImpl.class);
     private final BookingRepository bookingRepository;
     private final PassengerRepository passengerRepository;
     private final LocationServiceApi locationServiceApi;
@@ -92,17 +95,24 @@ public class BookingServiceImpl implements BookingService{
             @Override
             public void onResponse(Call<DriverLocationDto[]> call, Response<DriverLocationDto[]> response) {
                 if(response.isSuccessful() && response.body() != null){
-                    System.out.println("The nearby drivers are : ");
+                    logger.info("Fetching nearby drivers : ");
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    System.out.println("Nearby driver to you location : ");
                     List<DriverLocationDto> driverLocations = Arrays.asList(response.body());
                     driverLocations.forEach(driverLocationDto -> System.out.println("Driver Id : "+driverLocationDto.getDriverId()+" lat : "+driverLocationDto.getLatitude()+" long : "+driverLocationDto.getLongitude()));
                     try {
                         raiseRideRequestAsync(RideRequestDto.builder().passengerId(passengerId).bookingId(bookingId).build());
                     } catch (Exception e) {
+                        logger.warn("Something went wrong while fetching the nearby driver..");
                         throw new RuntimeException(e);
                     }
                 }
                 else {
-                    System.out.println("Request to process nearby drivers failed !! : "+response.message());
+                    logger.error("Request to process nearby drivers failed !! : {} ",response.message());
                 }
             }
 
@@ -121,11 +131,11 @@ public class BookingServiceImpl implements BookingService{
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                 if (response.isSuccessful() && response.body() != null){
                     Boolean result = response.body().booleanValue();
-                    System.out.println("Driver response is : " + result);
-
+                    logger.info("Retrofit api call has been made to socket server to raise new ride request to the drivers :{} " ,result);
+                    logger.info("Confirming ride, Assigning driver....");
                 }
                 else{
-                    System.out.println("Request for new ride failed !!"+response.message());
+                    logger.error("Request for new ride failed !! {} ",response.message());
                 }
             }
 

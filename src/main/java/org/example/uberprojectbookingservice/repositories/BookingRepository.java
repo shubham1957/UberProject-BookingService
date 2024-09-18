@@ -15,4 +15,9 @@ public interface BookingRepository extends JpaRepository<Booking,Long> {
     @Modifying
     @Query("UPDATE Booking b SET b.bookingStatus = :status, b.driver = :driver WHERE b.id = :id")
     void updateBookingStatusAndDriverById(@Param("id") Long id, @Param("status") BookingStatus status, @Param("driver") Driver driver);
+
+    @Modifying
+    @Query("UPDATE Booking b SET b.bookingStatus = :status WHERE b.id = :id")
+    void updateBookingStatusById(@Param("id") Long id, @Param("status") BookingStatus status);
+
 }

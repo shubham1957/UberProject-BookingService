@@ -10,4 +10,5 @@ public interface UberSocketApi {
 
     @POST("/api/socket/newride")
     Call<Boolean> raiseRideRequest(@Body RideRequestDto requestDto);
+
 }

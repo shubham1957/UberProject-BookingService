@@ -3,20 +3,17 @@ spring:
     name: BookingService
   kafka:
     bootstrap-servers: localhost:9092
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
     consumer:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      group-id: sample-group-2
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      group-id: booking_group
       auto-offset-reset: earliest
   datasource:
     url: jdbc:mysql://localhost:3306/Uber_Db_Local
     username: root
     password: Mac@local
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: validate
 

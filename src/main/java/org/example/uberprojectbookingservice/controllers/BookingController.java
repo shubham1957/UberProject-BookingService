@@ -27,9 +27,6 @@ public class BookingController {
 
     @PostMapping("/{bookingId}")
     public ResponseEntity<UpdateBookingResponseDto> updateBooking(@RequestBody UpdateBookingRequestDto requestDto, @PathVariable Long bookingId){
-        System.out.println("booking Id : "+bookingId);
-        System.out.println("Driver Id : "+requestDto.getDriverId());
-        System.out.println("Status in controller : "+requestDto.getStatus());
         return new ResponseEntity<>(bookingService.updateBooking(requestDto, bookingId), HttpStatus.OK);
     }
 }
