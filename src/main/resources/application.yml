@@ -1,6 +1,6 @@
 spring:
   application:
-    name: BookingService
+    name: booking-service
   kafka:
     bootstrap-servers: localhost:9092
     consumer:

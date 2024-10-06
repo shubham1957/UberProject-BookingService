@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-@Transactional
 public class RideServiceImpl implements RideService{
 
     private final Logger logger = LoggerFactory.getLogger(RideServiceImpl.class);
@@ -41,6 +40,7 @@ public class RideServiceImpl implements RideService{
     }
 
     @Override
+    @Transactional
     public void handleRideConfirmed(UpdateBookingRequestDto updateBookingRequestDto) {
         logger.info("RIDE CONFIRMED, DRIVER IS JUST 3 MIN AWAY");
         driverRepository.updateDriverAvailabilityById(updateBookingRequestDto.getDriverId(), false);
@@ -72,13 +72,10 @@ public class RideServiceImpl implements RideService{
                 .status(BookingStatus.COMPLETED)
                 .build();
 
-        logger.info("Status After Ride completed : Status: {}, Deriver Id : {} ",rideStatusDto.getStatus(), bookingRequestDto.getDriverId());
+        logger.info("Status After Ride completed : Status: {}, Driver Id : {} ",rideStatusDto.getStatus(), bookingRequestDto.getDriverId());
         updateRideStatus(rideStatusDto);
         //make driver available
         driverRepository.updateDriverAvailabilityById(bookingRequestDto.getDriverId(), true);
-        Optional<Driver> driver = driverRepository.findById(bookingRequestDto.getDriverId().get());
-
-        logger.info("Driver is available now? ----- {}",driver.get().isAvailable());
         // make an async call to review service to enter a review
     }
 }
